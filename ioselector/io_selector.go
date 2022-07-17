@@ -11,7 +11,7 @@ var ErrInvalidFileSize = errors.New("file size can`t be zero or negative")
 // FilePerm 新建的文件的授权
 const FilePerm = 0644
 
-// IOSelector 读写轮询器是用来进行文件读写和mmap映射的
+// IOSelector 读写选择器是用来进行文件读写或者mmap映射的
 type IOSelector interface {
 	// Write 将byte数组追加到offset的位置
 	// 它返回的是写入的字节数

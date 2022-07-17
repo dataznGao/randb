@@ -33,7 +33,6 @@ const (
 	FilePrefix = "rance.log."
 )
 
-
 // FileType 文件类型需要对数据结构进行分类
 type FileType int8
 
@@ -66,7 +65,7 @@ var (
 )
 
 // IOtype 代表了文件IO的不同方式，当前只支持FIleIO和MMap
-type IOType int8 
+type IOType int8
 
 const (
 	FileIO IOType = 0
@@ -82,7 +81,6 @@ type LogFile struct {
 	WriteAt    int64
 	IoSelector ioselector.IOSelector
 }
-
 
 // OpenLogFile 打开一个存在的日志文件，或者新建一个日志文件
 // fileSize必须是正的，会根据ioType来决定用哪种方式打开
@@ -107,8 +105,8 @@ func OpenLogFile(path string, fid uint32, fileSize int64, fileType FileType, ioT
 	return
 }
 
-func (lf *LogFile) readLogEntry(offset int64) (*Entry, int64, error) {
-	
+func (lf *LogFile) readLogEntry(offset int64) (*EntryBody, int64, error) {
+
 }
 
 // getLogFileName 获取日志文件名

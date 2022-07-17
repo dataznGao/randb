@@ -1,7 +1,6 @@
 package logfile
 
 import (
-	"bytes"
 	"encoding/binary"
 	"hash/crc32"
 )
@@ -9,31 +8,31 @@ import (
 // 真正落盘时，是entryHeader  + logEntry这样反复迭代
 // logEntry是真正落盘的数据条，entryHeader是元数据头
 // 这个元数据头不希望被外界读到
- const MaxHeaderSize = 25
+const MaxHeaderSize = 25
 
- // EntryType entry的类型
- type EntryType byte
+// EntryType entry的类型
+type EntryType byte
 
- const (
+const (
 	// TypeDelete 代表这个entry已经被删除了
 	TypeDelete EntryType = 1
 	// TypeListMeta 代表这个是ListMeta
 	TypeListMeta EntryType = 2
- )
+)
 
 type EntryBody struct {
-	Key  		[]byte
-	Value 		[]byte
-	expiredAt  	int64
-	Type       	EntryType
+	Key       []byte
+	Value     []byte
+	expiredAt int64
+	Type      EntryType
 }
 
 type entryHeader struct {
-	crc32		uint32
-	typ			EntryType
-	kSize		uint32
-	vSize		uint32
-	expiredAt   uint32
+	crc32     uint32
+	typ       EntryType
+	kSize     uint32
+	vSize     uint32
+	expiredAt uint32
 }
 
 // 存储的时候将整条数据：entryHeader + entryBody都encode成byte
@@ -47,7 +46,7 @@ func EncodeEntry(e *EntryBody) ([]byte, int) {
 	if e == nil {
 		return nil, 0
 	}
-	
+
 	// 编码头
 	header := make([]byte, MaxHeaderSize)
 	// crc 32位, 4个字节
@@ -65,7 +64,7 @@ func EncodeEntry(e *EntryBody) ([]byte, int) {
 	buf := make([]byte, size)
 	copy(buf[:index], header[:])
 	copy(buf[index:], e.Key)
-	copy(buf[index + len(e.Key):], e.Value)
+	copy(buf[index+len(e.Key):], e.Value)
 
 	// crc校验
 	crc := crc32.ChecksumIEEE(buf[4:])
